@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Signup - Extracurricular Activities</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Basic Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 15px 20px;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav ul a:hover {
+            color: #ffbb00;
+        }
+
+        /* Signup Form Section */
+        .signup-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .signup-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .signup-container h2 {
+            margin-bottom: 20px;
+            color: #007BFF;
+        }
+
+        .signup-container label {
+            display: block;
+            margin: 10px 0 5px;
+            text-align: left;
+        }
+
+        .signup-container input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s;
+        }
+
+        .signup-container input:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        .signup-container button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .signup-container button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Messages */
+        .message {
+            margin-top: 15px;
+            display: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #ffbb00;
+            color: #fff;
+            text-align: center;
+            padding: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="container">
+            <div class="logo">Extracurricular Manager</div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="user-login.html">Login</a></li>
+                <li><a href="user-signup.html">Signup</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Signup Form Section -->
+    <section class="signup-section">
+        <div class="signup-container">
+            <h2>User Signup</h2>
+            <form id="signup-form">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+                <label for="confirm-password">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="Re-enter your password" required>
+
+                <button type="submit">Signup</button>
+            </form>
+
+            <!-- Success and Error Messages -->
+            <div id="signup-success" class="message success">
+                Signup successful! You can now <a href="user-login.html">login</a>.
+            </div>
+            <div id="signup-error" class="message error"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Extracurricular Activities Manager. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript for Signup Functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const signupForm = document.getElementById('signup-form');
+            const signupSuccess = document.getElementById('signup-success');
+            const signupError = document.getElementById('signup-error');
+
+            signupForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Get form values
+                const username = document.getElementById('username').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+
+                // Simple validation
+                if (password !== confirmPassword) {
+                    signupError.textContent = "Passwords do not match.";
+                    signupError.style.display = 'block';
+                    signupSuccess.style.display = 'none';
+                    return;
+                }
+
+                if (password.length < 6) {
+                    signupError.textContent = "Password must be at least 6 characters long.";
+                    signupError.style.display = 'block';
+                    signupSuccess.style.display = 'none';
+                    return;
+                }
+
+                // Retrieve existing users from localStorage
+                let users = JSON.parse(localStorage.getItem('users')) || [];
+
+                // Check if username or email already exists
+                const userExists = users.some(user => user.username === username || user.email === email);
+                if (userExists) {
+                    signupError.textContent = "Username or Email already exists.";
+                    signupError.style.display = 'block';
+                    signupSuccess.style.display = 'none';
+                    return;
+                }
+
+                // Create new user object
+                const newUser = {
+                    username: username,
+                    email: email,
+                    password: password
+                };
+
+                // Add to users array
+                users.push(newUser);
+
+                // Save back to localStorage
+                localStorage.setItem('users', JSON.stringify(users));
+
+                // Reset form
+                signupForm.reset();
+
+                // Show success message
+                signupSuccess.style.display = 'block';
+                signupError.style.display = 'none';
+
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    signupSuccess.style.display = 'none';
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>

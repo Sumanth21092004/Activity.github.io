@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Extracurricular Activities</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Basic Reset */
+        body, h1, h2, h3, p {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #e9ecef;
+            color: #343a40;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #000; /* Changed to black */
+            color: #fff;
+            padding: 15px;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            color: #fff; /* White text */
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffc107; /* Change hover color if needed */
+        }
+
+        /* Container Styles */
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h2, h3 {
+            border-bottom: 2px solid #ffc107;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #ffc107;
+        }
+
+        /* Form Styles */
+        form {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #ffc107;
+            outline: none;
+        }
+
+        button {
+            background-color: #ffc107;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #e0a800;
+        }
+
+        /* Message Styles */
+        .message {
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #ffc107;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+            padding: 15px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover, .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 90%;
+            }
+
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="container">
+            <div class="logo">Admin Panel</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="admin.html">Dashboard</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Admin Dashboard -->
+    <section class="container">
+        <h2>Admin Dashboard</h2>
+
+        <!-- Add New Event Form -->
+        <section id="add-event">
+            <h3>Add New Event</h3>
+            <form id="add-event-form">
+                <div class="form-group">
+                    <label for="event-name">Event Name:</label>
+                    <input type="text" id="event-name" name="event-name" placeholder="e.g., Basketball Tournament" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-type">Event Type:</label>
+                    <select id="event-type" name="event-type" required>
+                        <option value="">-- Select Type --</option>
+                        <option value="Club">Club</option>
+                        <option value="Sport">Sport</option>
+                        <option value="Event">Event</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="event-date">Date:</label>
+                    <input type="date" id="event-date" name="event-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-description">Description:</label>
+                    <textarea id="event-description" name="event-description" rows="4" placeholder="Describe the event..." required></textarea>
+                </div>
+                <button type="submit">Add Event</button>
+            </form>
+            <div id="add-success" class="message success">
+                Event added successfully!
+            </div>
+            <div id="add-error" class="message error">
+                Please fill in all fields correctly.
+            </div>
+        </section>
+
+        <!-- Manage Events Table -->
+        <section id="manage-events">
+            <h3>Manage Events</h3>
+            <table id="events-table">
+                <thead>
+                    <tr>
+                        <th>Event Name</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Participants</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamic Event Rows -->
+                </tbody>
+            </table>
+            <div id="no-events" class="message error">
+                No events available. Please add an event.
+            </div>
+        </section>
+
+        <!-- Track Participation -->
+        <section id="track-participation">
+            <h3>Track Student Participation</h3>
+            <form action="#" method="get" id="track-form">
+                <div class="form-group">
+                    <label for="student-id">Student ID:</label>
+                    <input type="text" id="student-id" name="student-id" placeholder="Enter Student ID" required>
+                </div>
+                <button type="submit">View Participation</button>
+            </form>
+            <div id="participation-details" class="section">
+                <!-- Dynamic Content -->
+            </div>
+        </section>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Extracurricular Activities Manager. All rights reserved.</p>
+    </footer>
+
+    <!-- Edit Event Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-modal">&times;</span>
+            <h3>Edit Event</h3>
+            <form id="edit-event-form">
+                <input type="hidden" id="edit-event-id">
+                <div class="form-group">
+                    <label for="edit-event-name">Event Name:</label>
+                    <input type="text" id="edit-event-name" name="edit-event-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-event-type">Event Type:</label>
+                    <select id="edit-event-type" name="edit-event-type" required>
+                        <option value="">-- Select Type --</option>
+                        <option value="Club">Club</option>
+                        <option value="Sport">Sport</option>
+                        <option value="Event">Event</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-event-date">Date:</label>
+                    <input type="date" id="edit-event-date" name="edit-event-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-event-description">Description:</label>
+                    <textarea id="edit-event-description" name="edit-event-description" rows="4" required></textarea>
+                </div>
+                <button type="submit">Save Changes</button>
+            </form>
+            <div id="edit-success" class="message success">
+                Event updated successfully!
+            </div>
+            <div id="edit-error" class="message error">
+                Please fill in all fields correctly.
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Handling Admin Functionalities -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addEventForm = document.getElementById('add-event-form');
+            const eventsTableBody = document.querySelector('#events-table tbody');
+            const addSuccess = document.getElementById('add-success');
+            const addError = document.getElementById('add-error');
+            const noEventsMessage = document.getElementById('no-events');
+
+            const editModal = document.getElementById('edit-modal');
+            const closeModal = document.getElementById('close-modal');
+            const editEventForm = document.getElementById('edit-event-form');
+            const editSuccess = document.getElementById('edit-success');
+            const editError = document.getElementById('edit-error');
+
+            let events = JSON.parse(localStorage.getItem('events')) || [];
+
+            function renderEvents() {
+                eventsTableBody.innerHTML = '';
+
+                if (events.length === 0) {
+                    noEventsMessage.style.display = 'block';
+                } else {
+                    noEventsMessage.style.display = 'none';
+                    events.forEach((event, index) => {
+                        const tr = document.createElement('tr');
+
+                        tr.innerHTML = `
+                            <td>${event.name}</td>
+                            <td>${event.type}</td>
+                            <td>${event.date}</td>
+                            <td>${event.participants || 0}</td>
+                            <td>
+                                <a href="#" class="button button-secondary" style="margin-right: 5px;" onclick="openEditModal(${index})">Edit</a>
+                                <a href="#" class="button button-danger" onclick="deleteEvent(${index})">Delete</a>
+                            </td>
+                        `;
+                        eventsTableBody.appendChild(tr);
+                    });
+                }
+            }
+
+            addEventForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('event-name').value.trim();
+                const type = document.getElementById('event-type').value;
+                const date = document.getElementById('event-date').value;
+                const description = document.getElementById('event-description').value.trim();
+
+                if (name === '' || type === '' || date === '' || description === '') {
+                    addError.style.display = 'block';
+                    addSuccess.style.display = 'none';
+                    return;
+                }
+
+                events.push({ name, type, date, description, participants: 0 });
+                localStorage.setItem('events', JSON.stringify(events));
+                addEventForm.reset();
+                addSuccess.style.display = 'block';
+                addError.style.display = 'none';
+                renderEvents();
+                setTimeout(() => { addSuccess.style.display = 'none'; }, 3000);
+            });
+
+            window.deleteEvent = function(index) {
+                if (confirm(`Are you sure you want to delete the event "${events[index].name}"?`)) {
+                    events.splice(index, 1);
+                    localStorage.setItem('events', JSON.stringify(events));
+                    renderEvents();
+                }
+            };
+
+            window.openEditModal = function(index) {
+                editModal.style.display = 'block';
+                document.getElementById('edit-event-id').value = index;
+                document.getElementById('edit-event-name').value = events[index].name;
+                document.getElementById('edit-event-type').value = events[index].type;
+                document.getElementById('edit-event-date').value = events[index].date;
+                document.getElementById('edit-event-description').value = events[index].description;
+                editSuccess.style.display = 'none';
+                editError.style.display = 'none';
+            };
+
+            closeModal.addEventListener('click', function() {
+                editModal.style.display = 'none';
+            });
+
+            window.addEventListener('click', function(event) {
+                if (event.target === editModal) {
+                    editModal.style.display = 'none';
+                }
+            });
+
+            editEventForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const index = document.getElementById('edit-event-id').value;
+                const name = document.getElementById('edit-event-name').value.trim();
+                const type = document.getElementById('edit-event-type').value;
+                const date = document.getElementById('edit-event-date').value;
+                const description = document.getElementById('edit-event-description').value.trim();
+
+                if (name === '' || type === '' || date === '' || description === '') {
+                    editError.style.display = 'block';
+                    editSuccess.style.display = 'none';
+                    return;
+                }
+
+                events[index] = { ...events[index], name, type, date, description };
+                localStorage.setItem('events', JSON.stringify(events));
+                renderEvents();
+                editSuccess.style.display = 'block';
+                editError.style.display = 'none';
+                setTimeout(() => { editSuccess.style.display = 'none'; editModal.style.display = 'none'; }, 3000);
+            });
+
+            renderEvents();
+        });
+    </script>
+</body>
+</html>

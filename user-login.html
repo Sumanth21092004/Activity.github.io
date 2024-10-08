@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login - Extracurricular Activities</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Basic Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 15px 20px;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav ul a:hover {
+            color: #ffbb00;
+        }
+
+        /* Login Form Section */
+        .login-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            color: #007BFF;
+        }
+
+        .login-container label {
+            display: block;
+            margin: 10px 0 5px;
+            text-align: left;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s;
+        }
+
+        .login-container input:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        .login-container button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-container button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Messages */
+        .message {
+            margin-top: 15px;
+            display: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #ffbb00;
+            color: #fff;
+            text-align: center;
+            padding: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="container">
+            <div class="logo">Extracurricular Manager</div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="user-login.html">Login</a></li>
+                <li><a href="user-signup.html">Signup</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Login Form Section -->
+    <section class="login-section">
+        <div class="login-container">
+            <h2>User Login</h2>
+            <form id="login-form">
+                <label for="login-identifier">Username or Email:</label>
+                <input type="text" id="login-identifier" name="login-identifier" placeholder="Enter your username or email" required>
+
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" name="login-password" placeholder="Enter your password" required>
+
+                <button type="submit">Login</button>
+            </form>
+
+            <!-- Success and Error Messages -->
+            <div id="login-success" class="message success">
+                Login successful! Redirecting to your dashboard...
+            </div>
+            <div id="login-error" class="message error"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Extracurricular Activities Manager. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript for Login Functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('login-form');
+            const loginSuccess = document.getElementById('login-success');
+            const loginError = document.getElementById('login-error');
+
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Get form values
+                const identifier = document.getElementById('login-identifier').value.trim();
+                const password = document.getElementById('login-password').value;
+
+                // Retrieve users from localStorage
+                let users = JSON.parse(localStorage.getItem('users')) || [];
+
+                // Find user by username or email
+                const user = users.find(user => (user.username === identifier || user.email === identifier) && user.password === password);
+
+                if (user) {
+                    // Successful login
+                    loginSuccess.style.display = 'block';
+                    loginError.style.display = 'none';
+
+                    // Optionally, set a session or token in localStorage
+                    localStorage.setItem('loggedInUser', JSON.stringify(user));
+
+                    // Redirect to user dashboard after a short delay
+                    setTimeout(() => {
+                        window.location.href = 'user.html';
+                    }, 2000);
+                } else {
+                    // Failed login
+                    loginError.textContent = "Invalid username/email or password.";
+                    loginError.style.display = 'block';
+                    loginSuccess.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
